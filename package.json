@@ -1,10 +1,10 @@
 {
-  "name": "smart-tooltip",
+  "name": "responsitip",
   "version": "0.1.0",
   "description": "Responsive tooltip wrapper for React that switches hover/click behavior by breakpoint",
   "type": "module",
-  "main": "dist/smart-tooltip.cjs",
-  "module": "dist/smart-tooltip.js",
+  "main": "dist/responsitip.cjs",
+  "module": "dist/responsitip.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
@@ -15,6 +15,7 @@
     "react",
     "tooltip",
     "responsive",
+    "responsitip",
     "mobile",
     "desktop",
     "hover",

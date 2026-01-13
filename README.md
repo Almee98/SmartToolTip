@@ -1,11 +1,11 @@
-# SmartToolTip
+# Responsitip
 
 Responsive tooltip wrapper for React that switches hover/click behavior by breakpoint.
 
 ## Install
 
 ```
-npm install smart-tooltip
+npm install responsitip
 ```
 
 ## Peer dependencies
@@ -18,7 +18,7 @@ npm install smart-tooltip
 ## Usage
 
 ```jsx
-import SmartTooltip from 'smart-tooltip';
+import SmartTooltip from 'responsitip';
 
 <SmartTooltip title="Hello" triggerType="both" placement="top">
   <span>Hover or tap me</span>

@@ -17,9 +17,9 @@ export default defineConfig(({ command }) => {
     build: {
       lib: {
         entry: path.resolve(__dirname, 'src/index.js'),
-        name: 'SmartTooltip',
+        name: 'Responsitip',
         formats: ['es', 'cjs'],
-        fileName: (format) => (format === 'cjs' ? 'smart-tooltip.cjs' : 'smart-tooltip.js'),
+        fileName: (format) => (format === 'cjs' ? 'responsitip.cjs' : 'responsitip.js'),
       },
       rollupOptions: {
         external: ['react', 'react-dom', 'react-bootstrap'],

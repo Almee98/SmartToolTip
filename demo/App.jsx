@@ -17,7 +17,7 @@ function App() {
     <div className="container my-5">
       <div className="row">
         <div className="col-12">
-          <h1 className="mb-4">SmartTooltip Demo</h1>
+          <h1 className="mb-4">Responsitip Demo</h1>
           <div className="alert alert-info">
             <strong>Current screen width:</strong> {screenWidth}px
             <br />
