@@ -1,0 +1,63 @@
+{
+  "name": "smart-tooltip",
+  "version": "0.1.0",
+  "description": "Responsive tooltip wrapper for React that switches hover/click behavior by breakpoint",
+  "type": "module",
+  "main": "dist/smart-tooltip.cjs",
+  "module": "dist/smart-tooltip.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "react",
+    "tooltip",
+    "responsive",
+    "mobile",
+    "desktop",
+    "hover",
+    "click",
+    "react-bootstrap",
+    "breakpoint"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/almee98/SmartToolTip.git"
+  },
+  "author": "Almee Christian",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npm run copy-types",
+    "copy-types": "node -e \"require('fs').copyFileSync('types/index.d.ts', 'dist/index.d.ts')\"",
+    "prepublishOnly": "npm run build && npm run test",
+    "preview": "vite preview",
+    "lint": "eslint src --ext .js,.jsx",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.8.1",
+    "react": ">=17",
+    "react-bootstrap": "^2.0.0",
+    "react-dom": ">=17"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jsdom": "^23.0.1",
+    "vite": "^5.4.0",
+    "vitest": "^1.1.0"
+  }
+}
