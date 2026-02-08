@@ -18,11 +18,11 @@ npm install responsitip
 ## Usage
 
 ```jsx
-import SmartTooltip from 'responsitip';
+import Responsitip from 'responsitip';
 
-<SmartTooltip title="Hello" triggerType="both" placement="top">
+<Responsitip title="Hello" triggerType="both" placement="top">
   <span>Hover or tap me</span>
-</SmartTooltip>
+</Responsitip>
 ```
 
 ## Props
@@ -31,6 +31,7 @@ import SmartTooltip from 'responsitip';
 - triggerType: "hover" | "click" | "both" (default: "hover")
 - placement: string (default: "top")
 - tooltipId: string
+- fillContainer: boolean (default: false)
 - children (node, required)
 
 ## Development

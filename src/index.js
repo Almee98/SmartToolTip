@@ -1,2 +1,2 @@
-export { default as SmartTooltip } from './SmartToolTip.jsx';
-export { default } from './SmartToolTip.jsx';
+export { default as Responsitip } from './Responsitip.jsx';
+export { default } from './Responsitip.jsx';

@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import SmartTooltip from './SmartToolTip';
+import Responsitip from './Responsitip';
 
 // Mock react-bootstrap
 vi.mock('react-bootstrap', () => ({
@@ -42,12 +42,12 @@ vi.mock('react-bootstrap', () => ({
         data-visible={isVisible}
       >
         {children}
-        {isVisible && <div data-testid="tooltip">{overlay?.props?.children}</div>}
+        {isVisible && <div data-testid="tooltip">{overlay}</div>}
       </div>
     );
   },
-  Tooltip: ({ children, id, className }) => (
-    <div data-testid="tooltip-content" id={id} className={className}>
+  Tooltip: ({ children, id, className, style }) => (
+    <div data-testid="tooltip-content" id={id} className={className} style={style}>
       {children}
     </div>
   ),
@@ -59,7 +59,7 @@ vi.mock('./useMediaQuery', () => ({
   useIsDesktop: () => mockUseIsDesktop(),
 }));
 
-describe('SmartTooltip', () => {
+describe('Responsitip', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -71,9 +71,9 @@ describe('SmartTooltip', () => {
   it('should render children', () => {
     mockUseIsDesktop.mockReturnValue(true);
     render(
-      <SmartTooltip title="Test tooltip">
+      <Responsitip title="Test tooltip">
         <button>Hover me</button>
-      </SmartTooltip>
+      </Responsitip>
     );
 
     expect(screen.getByText('Hover me')).toBeInTheDocument();
@@ -84,9 +84,9 @@ describe('SmartTooltip', () => {
     const user = userEvent.setup();
 
     render(
-      <SmartTooltip title="Test tooltip" triggerType="hover">
+      <Responsitip title="Test tooltip" triggerType="hover">
         <button>Hover me</button>
-      </SmartTooltip>
+      </Responsitip>
     );
 
     const button = screen.getByText('Hover me');
@@ -102,9 +102,9 @@ describe('SmartTooltip', () => {
     mockUseIsDesktop.mockReturnValue(false);
     
     render(
-      <SmartTooltip title="Test tooltip" triggerType="hover">
+      <Responsitip title="Test tooltip" triggerType="hover">
         <button>Hover me</button>
-      </SmartTooltip>
+      </Responsitip>
     );
 
     expect(screen.queryByTestId('tooltip')).not.toBeInTheDocument();
@@ -115,9 +115,9 @@ describe('SmartTooltip', () => {
     const user = userEvent.setup();
 
     render(
-      <SmartTooltip title="Test tooltip" triggerType="click">
+      <Responsitip title="Test tooltip" triggerType="click">
         <button>Click me</button>
-      </SmartTooltip>
+      </Responsitip>
     );
 
     const button = screen.getByText('Click me');
@@ -134,9 +134,9 @@ describe('SmartTooltip', () => {
     const user = userEvent.setup();
 
     render(
-      <SmartTooltip title="Test tooltip" triggerType="click">
+      <Responsitip title="Test tooltip" triggerType="click">
         <button>Click me</button>
-      </SmartTooltip>
+      </Responsitip>
     );
 
     const button = screen.getByText('Click me');
@@ -160,9 +160,9 @@ describe('SmartTooltip', () => {
     // Desktop behavior
     mockUseIsDesktop.mockReturnValue(true);
     const { rerender } = render(
-      <SmartTooltip title="Test tooltip" triggerType="both">
+      <Responsitip title="Test tooltip" triggerType="both">
         <button>Interact me</button>
-      </SmartTooltip>
+      </Responsitip>
     );
 
     const button = screen.getByText('Interact me');
@@ -175,9 +175,9 @@ describe('SmartTooltip', () => {
     // Mobile behavior
     mockUseIsDesktop.mockReturnValue(false);
     rerender(
-      <SmartTooltip title="Test tooltip" triggerType="both">
+      <Responsitip title="Test tooltip" triggerType="both">
         <button>Interact me</button>
-      </SmartTooltip>
+      </Responsitip>
     );
 
     // Wait for rerender to complete
@@ -201,9 +201,9 @@ describe('SmartTooltip', () => {
   it('should use custom placement', () => {
     mockUseIsDesktop.mockReturnValue(true);
     render(
-      <SmartTooltip title="Test tooltip" placement="bottom">
+      <Responsitip title="Test tooltip" placement="bottom">
         <button>Hover me</button>
-      </SmartTooltip>
+      </Responsitip>
     );
 
     const overlay = screen.getByTestId('overlay-trigger');
@@ -213,13 +213,37 @@ describe('SmartTooltip', () => {
   it('should use custom tooltipId', () => {
     mockUseIsDesktop.mockReturnValue(true);
     render(
-      <SmartTooltip title="Test tooltip" tooltipId="custom-id">
+      <Responsitip title="Test tooltip" tooltipId="custom-id">
         <button>Hover me</button>
-      </SmartTooltip>
+      </Responsitip>
     );
 
     // The tooltip should have the custom ID when visible
     // This is tested through the mock implementation
     expect(screen.getByText('Hover me')).toBeInTheDocument();
+  });
+
+  it('should wrap children with a full-size flex container when fillContainer is true in hover mode', () => {
+    mockUseIsDesktop.mockReturnValue(true);
+    render(
+      <Responsitip title="Test tooltip" triggerType="hover" fillContainer>
+        <button>Hover me</button>
+      </Responsitip>
+    );
+
+    const innerWrapper = screen.getByText('Hover me').parentElement;
+    expect(innerWrapper).toHaveStyle({ display: 'flex', width: '100%', height: '100%' });
+  });
+
+  it('should stretch click wrapper to full container when fillContainer is true', () => {
+    mockUseIsDesktop.mockReturnValue(false);
+    render(
+      <Responsitip title="Test tooltip" triggerType="click" fillContainer>
+        <button>Click me</button>
+      </Responsitip>
+    );
+
+    const clickWrapper = screen.getByText('Click me').closest('.responsitip');
+    expect(clickWrapper).toHaveStyle({ display: 'flex', width: '100%', height: '100%' });
   });
 });

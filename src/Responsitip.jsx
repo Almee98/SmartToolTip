@@ -3,12 +3,19 @@ import PropTypes from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useIsDesktop } from './useMediaQuery';
 
-const SmartTooltip = ({ title, placement, triggerType, children, tooltipId }) => {
+const Responsitip = ({
+  title,
+  placement,
+  triggerType,
+  children,
+  tooltipId,
+  fillContainer,
+}) => {
   const isDesktop = useIsDesktop();
 
   const [showTooltip, setShowTooltip] = useState(false);
   const wrapperRef = useRef(null);
-  const idRef = useRef(tooltipId || `smartTooltip-${Math.random().toString(36).slice(2, 11)}`);
+  const idRef = useRef(tooltipId || `responsitip-${Math.random().toString(36).slice(2, 11)}`);
 
   // Determine effective mode (desktop: hover-only, mobile: click-only) based on prop.
   // "hover" -> desktop only, "click" -> mobile only, "both" -> hover desktop + click mobile.
@@ -28,7 +35,7 @@ const SmartTooltip = ({ title, placement, triggerType, children, tooltipId }) =>
     }
 
     function handleClickOutside (e) {
-      if (!e.target.closest('.smart-tooltip')) {
+      if (!e.target.closest('.responsitip')) {
         setShowTooltip(false);
       }
     }
@@ -41,10 +48,10 @@ const SmartTooltip = ({ title, placement, triggerType, children, tooltipId }) =>
 
     if (!isDesktop) {
       document.addEventListener('click', handleClickOutside);
-      window.addEventListener('smartTooltipOpened', handleTooltipOpened);
+      window.addEventListener('responsitipOpened', handleTooltipOpened);
       return () => {
         document.removeEventListener('click', handleClickOutside);
-        window.removeEventListener('smartTooltipOpened', handleTooltipOpened);
+        window.removeEventListener('responsitipOpened', handleTooltipOpened);
       };
     }
     return undefined;
@@ -54,9 +61,26 @@ const SmartTooltip = ({ title, placement, triggerType, children, tooltipId }) =>
     return children;
   }
   const trigger = effectiveMode === 'hover' ? ['hover', 'focus'] : ['click'];
+  const wrappedChildren = fillContainer ? (
+    <span
+      style={{
+        alignItems: 'center',
+        display: 'flex',
+        height: '100%',
+        justifyContent: 'center',
+        width: '100%',
+      }}
+    >
+      {children}
+    </span>
+  ) : children;
 
   const tooltipOverlay = (
-    <Tooltip data-testid="tooltip" className="u-z-index-9020" id={idRef.current}>
+    <Tooltip
+      data-testid="tooltip"
+      className="u-z-index-9020"
+      id={idRef.current}
+    >
       {title}
     </Tooltip>
   );
@@ -69,7 +93,7 @@ const SmartTooltip = ({ title, placement, triggerType, children, tooltipId }) =>
         overlay={tooltipOverlay}
         trigger={trigger}
       >
-        {children}
+        {wrappedChildren}
       </OverlayTrigger>
     );
   }
@@ -77,7 +101,7 @@ const SmartTooltip = ({ title, placement, triggerType, children, tooltipId }) =>
   // Render for click trigger using OverlayTrigger controlled via `show` (mobile)
   const handleClick = () => {
     if (!showTooltip) {
-      window.dispatchEvent(new CustomEvent('smartTooltipOpened', { detail: wrapperRef.current }));
+      window.dispatchEvent(new CustomEvent('responsitipOpened', { detail: wrapperRef.current }));
     }
     setShowTooltip((prev) => !prev);
   };
@@ -86,28 +110,37 @@ const SmartTooltip = ({ title, placement, triggerType, children, tooltipId }) =>
     <OverlayTrigger overlay={tooltipOverlay} placement={placement} show={!isDesktop ? showTooltip : undefined}>
       <span
         ref={wrapperRef}
-        className="smart-tooltip"
+        className="responsitip"
         onClick={!isDesktop ? handleClick : undefined}
-        style={{ cursor: 'pointer', display: 'inline-block' }}
+        style={fillContainer ? {
+          alignItems: 'center',
+          cursor: 'pointer',
+          display: 'flex',
+          height: '100%',
+          justifyContent: 'center',
+          width: '100%',
+        } : { cursor: 'pointer', display: 'inline-block' }}
       >
-        {children}
+        {wrappedChildren}
       </span>
     </OverlayTrigger>
   );
 };
 
-SmartTooltip.propTypes = {
+Responsitip.propTypes = {
   title: PropTypes.node.isRequired,
   placement: PropTypes.string,
   triggerType: PropTypes.oneOf(['hover', 'click', 'both']),
   children: PropTypes.node.isRequired,
   tooltipId: PropTypes.string,
+  fillContainer: PropTypes.bool,
 };
 
-SmartTooltip.defaultProps = {
+Responsitip.defaultProps = {
   placement: 'top',
   triggerType: 'hover',
   tooltipId: undefined,
+  fillContainer: false,
 };
 
-export default SmartTooltip;
+export default Responsitip;
